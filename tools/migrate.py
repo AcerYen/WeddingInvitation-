@@ -27,6 +27,9 @@ for wow in site.select('wow-image'):
   h=round(int(m[2])*1600/int(m[1]));url=url[:m.start()]+re.sub(r'/fill/w_\d+,h_\d+',f'/fill/w_1600,h_{h}',url[m.start():],count=1)
  img=wow.find('img');img['src']=local(url);img['decoding']='async';img['loading']='eager' if len(manifest)<8 else 'lazy'
  wow.attrs.pop('data-image-info',None)
+for id in ['comp-muvg0h98','comp-muvg4ldo']:
+ x=site.find(id=id)
+ if x:x.decompose()
 for a in site.find_all('a',href=True):
  if 'jackclemence#' in a['href']:a['href']='#comp-mu22seyf';a['data-start']='true'
  if 'music.wixstatic' in a['href']:a['href']=local(a['href'])
@@ -45,15 +48,15 @@ for x in list(player.children):
  if getattr(x,'attrs',None) is not None and 'controls' in str(x.get('class','')):x.decompose()
 controls=player.select_one('[class*="_controls_"]')
 if controls:controls.decompose()
-audio=BeautifulSoup('<audio id="audio" controls preload="metadata" aria-label="would you be mine — TYSON YOSHI"></audio>','html.parser').audio
+audio=BeautifulSoup('<audio id="audio" autoplay controls preload="metadata" aria-label="would you be mine — TYSON YOSHI"></audio>','html.parser').audio
 audio['src']=local('https://music.wixstatic.com/mp3/050759_bdeba8e06e4b4b6fb5a00bc69a671dd4.mp3');player.append(audio)
 player.append(BeautifulSoup((root/'tools/player-controls.html').read_text(),'html.parser'))
 styles+='''\n/* Static migration: Wix runtime replacements. */
 :root{--wix-ads-height:0px!important;--wix-ads-top-height:0px!important;--wix-ads-bottom-height:0px!important}
 html{scroll-behavior:smooth}body{margin:0}wow-image,picture{display:block;width:100%;height:100%}wow-image img{display:block;width:100%;height:100%;object-fit:cover}#audio{width:100%;min-height:40px;margin-top:8px}#comp-mutjz522{scroll-margin-top:24px}.html-component{overflow:hidden}a:focus-visible,button:focus-visible{outline:2px solid #ba8e58;outline-offset:5px}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 '''
-head=f'''<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jack &amp; Clemence｜好久不見，婚禮見。</title><meta name="description" content="2026.12.12 台中林酒店 3樓全球廳，Jack &amp; Clemence 婚禮邀請"><meta property="og:title" content="Jack &amp; Clemence｜好久不見，婚禮見。"><meta property="og:type" content="website"><meta property="og:description" content="2026.12.12 台中林酒店 3樓全球廳"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="player.css"><script src="script.js" defer></script>'''
-(root/'index.html').write_text('<!doctype html><html lang="zh-Hant"><head>'+head+'</head><body class="responsive">'+str(site)+'</body></html>')
+head=f'''<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jack &amp; Clemence｜好久不見，婚禮見。</title><meta name="description" content="2026.12.12 台中林酒店 3樓全球廳，Jack &amp; Clemence 婚禮邀請"><meta property="og:title" content="Jack &amp; Clemence｜好久不見，婚禮見。"><meta property="og:type" content="website"><meta property="og:description" content="2026.12.12 台中林酒店 3樓全球廳"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="player.css"><script src="script.js" defer></script><script src="tour.js" defer></script>'''
+(root/'index.html').write_text('<!doctype html><html lang="zh-Hant"><head>'+head+'</head><body class="responsive">'+str(site)+(root/'tools/tour-controls.html').read_text()+'</body></html>')
 (root/'style.css').write_text(styles)
 (root/'countdown.html').write_text('<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0">'+urllib.request.urlopen('https://84df5c8c-0fa6-4470-8ab0-991895108fbb.filesusr.com/html/050759_204f86a64a2274cac10d7936f0836640.html').read().decode()+'</body></html>')
 (root/'rsvp.html').write_text('<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0">'+urllib.request.urlopen('https://84df5c8c-0fa6-4470-8ab0-991895108fbb.filesusr.com/html/050759_a05b6034f98c1d04cf4ba6d8950ac302.html').read().decode().replace('<iframe','<iframe title="婚禮出席回覆表單"')+'</body></html>')
