@@ -1,0 +1,168 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0"><div class="countdown">
+  <div class="title">OUR DAY</div>
+
+  <div class="timer">
+    <div class="unit">
+      <span id="days">00</span>
+      <small>DAYS</small>
+    </div>
+
+    <div class="colon">:</div>
+
+    <div class="unit">
+      <span id="hours">00</span>
+      <small>HOURS</small>
+    </div>
+
+    <div class="colon">:</div>
+
+    <div class="unit">
+      <span id="minutes">00</span>
+      <small>MINUTES</small>
+    </div>
+
+    <div class="colon">:</div>
+
+    <div class="unit">
+      <span id="seconds">00</span>
+      <small>SECONDS</small>
+    </div>
+  </div>
+</div>
+
+<style>
+  .countdown {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: #333333;
+  }
+
+  .title {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+  }
+
+  .timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 55px;
+  }
+
+  .unit span {
+    font-size: 42px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+
+  .unit small {
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin-top: 10px;
+  }
+
+  .colon {
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 18px;
+  }
+
+  @media (max-width: 600px) {
+    .title {
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+    }
+
+    .timer {
+      gap: 8px;
+    }
+
+    .unit {
+      min-width: 48px;
+    }
+
+    .unit span {
+      font-size: 28px;
+    }
+
+    .unit small {
+      font-size: 7px;
+      letter-spacing: 1.5px;
+      margin-top: 8px;
+    }
+
+    .colon {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+  }
+</style>
+
+<script>
+  // 婚禮日期：2026 年 12 月 12 日 12:12（台灣時間）
+  const weddingDate = new Date("2026-12-12T12:12:00+08:00").getTime();
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = weddingDate - now;
+
+    // 婚禮時間已到
+    if (distance <= 0) {
+      document.querySelector(".countdown").innerHTML = `
+        <div class="title">OUR DAY</div>
+      `;
+      return;
+    }
+
+    // 計算剩餘時間
+    const days = Math.floor(
+      distance / (1000 * 60 * 60 * 24)
+    );
+
+    const hours = Math.floor(
+      (distance / (1000 * 60 * 60)) % 24
+    );
+
+    const minutes = Math.floor(
+      (distance / (1000 * 60)) % 60
+    );
+
+    const seconds = Math.floor(
+      (distance / 1000) % 60
+    );
+
+    // 更新畫面
+    document.getElementById("days").textContent =
+      String(days).padStart(2, "0");
+
+    document.getElementById("hours").textContent =
+      String(hours).padStart(2, "0");
+
+    document.getElementById("minutes").textContent =
+      String(minutes).padStart(2, "0");
+
+    document.getElementById("seconds").textContent =
+      String(seconds).padStart(2, "0");
+  }
+
+  // 載入時立即執行一次
+  updateCountdown();
+
+  // 每秒更新一次
+  const timer = setInterval(function () { updateCountdown(); if (Date.now() >= weddingDate) clearInterval(timer); }, 1000);
+</script></body></html>

@@ -1,86 +1,32 @@
-// 捲動淡入
+'use strict';
+// The public page is entirely static. Audio only starts after an explicit click.
+document.querySelectorAll('[data-start]').forEach(function (link) {
+  link.addEventListener('click', function (event) {
+    event.preventDefault();
+    var player = document.querySelector('[data-anchor="music"]');
+    if (player) player.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+    var audio = document.getElementById('audio');
+    if (audio) audio.play().catch(function () { /* Native controls remain available if playback is blocked. */ });
+  });
+});
+
+// Reuse the source CSS entrance animations without the Wix interaction engine.
 (function () {
-  var items = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) {
-    items.forEach(function (el) { el.classList.add('is-visible'); });
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) {
-        e.target.classList.add('is-visible');
-        io.unobserve(e.target);
-      }
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      el.style.animationPlayState = 'running';
+      el.addEventListener('animationend', function () { el.setAttribute('data-motion-enter', 'done'); el.style.animationPlayState = ''; }, {once:true});
+      observer.unobserve(el);
     });
-  }, { threshold: 0.12 });
-  items.forEach(function (el) { io.observe(el); });
-})();
-
-// 封面輪播
-(function () {
-  var slides = document.querySelectorAll('.hero-slides .slide');
-  if (slides.length < 2) return;
-  var i = 0;
-  setInterval(function () {
-    slides[i].classList.remove('is-active');
-    i = (i + 1) % slides.length;
-    slides[i].classList.add('is-active');
-  }, 4500);
-})();
-
-// OUR DAY 倒數計時
-(function () {
-  var box = document.getElementById('countdown');
-  if (!box) return;
-  var target = new Date(box.getAttribute('data-target')).getTime();
-  var el = {};
-  box.querySelectorAll('[data-unit]').forEach(function (n) { el[n.getAttribute('data-unit')] = n; });
-  function pad(n) { return (n < 10 ? '0' : '') + n; }
-  function tick() {
-    var diff = Math.max(0, Math.floor((target - Date.now()) / 1000));
-    el.d.textContent = Math.floor(diff / 86400);
-    el.h.textContent = pad(Math.floor(diff % 86400 / 3600));
-    el.m.textContent = pad(Math.floor(diff % 3600 / 60));
-    el.s.textContent = pad(diff % 60);
-    return diff;
-  }
-  if (tick() > 0) {
-    var timer = setInterval(function () { if (tick() === 0) clearInterval(timer); }, 1000);
-  }
-})();
-
-// 音樂播放器
-(function () {
-  var audio = document.getElementById('audio');
-  var btn = document.getElementById('playBtn');
-  var seek = document.getElementById('seek');
-  var cur = document.getElementById('cur');
-  var dur = document.getElementById('dur');
-  if (!audio || !btn) return;
-
-  function fmt(s) {
-    if (!isFinite(s)) return '0:00';
-    var m = Math.floor(s / 60);
-    var r = Math.floor(s % 60);
-    return m + ':' + (r < 10 ? '0' : '') + r;
-  }
-
-  btn.addEventListener('click', function () {
-    if (audio.paused) {
-      audio.play().catch(function () {});
-    } else {
-      audio.pause();
-    }
-  });
-  audio.addEventListener('play', function () { btn.classList.add('is-playing'); });
-  audio.addEventListener('pause', function () { btn.classList.remove('is-playing'); });
-  audio.addEventListener('ended', function () { btn.classList.remove('is-playing'); });
-  audio.addEventListener('loadedmetadata', function () { dur.textContent = fmt(audio.duration); });
-  audio.addEventListener('timeupdate', function () {
-    cur.textContent = fmt(audio.currentTime);
-    if (audio.duration) seek.value = (audio.currentTime / audio.duration) * 100;
-  });
-  seek.addEventListener('input', function () {
-    if (audio.duration) audio.currentTime = (seek.value / 100) * audio.duration;
+  }, {threshold:0.05});
+  ["comp-mus6gta2", "comp-mus6i0w2", "comp-mus798x4", "comp-musktat0", "comp-musl07zl", "comp-musl1ixt", "comp-musl32vz", "comp-musl3826", "comp-musl63c1", "comp-musltcyg", "comp-muspmq2r", "comp-muspzbfr", "comp-musq0ayy", "comp-musrmtoh", "comp-mussjam7", "comp-must2nze", "comp-mutecurr", "comp-muteecbf", "comp-mutgg02x", "comp-mutisc1o", "comp-mutisy6v", "comp-mutitg5b", "comp-mutj4dou", "comp-mutj57kj", "comp-mutj5kms", "comp-mutj5tcd", "comp-mutj7ptl", "comp-mutj8qqg", "comp-mutji18s", "comp-mutjiniy", "comp-mutjj57d", "comp-mutjjlcv", "comp-mutke7tn", "comp-mutkfbwy", "comp-mutshhk0", "comp-mutsj86w", "comp-muvg0h98", "comp-muvg4ldo", "comp-muvgkhxo"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.removeAttribute('data-motion-enter');
+    if (getComputedStyle(el).animationName.indexOf('motion-') < 0) { el.setAttribute('data-motion-enter', 'done'); return; }
+    observer.observe(el);
   });
 })();
