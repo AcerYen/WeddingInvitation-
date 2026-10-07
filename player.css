@@ -1,0 +1,16 @@
+/* Match the source player, with browser-independent, keyboard-accessible controls. */
+.invitation-controls[hidden], .invitation-controls [hidden], #audio[hidden] { display:none!important; }
+.invitation-controls button { background:none; border:0; padding:0; color:inherit; cursor:pointer; display:grid; place-items:center; position:relative; min-width:28px; min-height:32px; }
+.invitation-controls svg { display:block; }
+.invitation-controls .invitation-seek { flex:1; min-width:22px; width:100%; height:32px; margin:0; padding:0; appearance:none; -webkit-appearance:none; cursor:pointer; background:transparent; --seek-progress:0%; }
+.invitation-seek::-webkit-slider-runnable-track { height:3px; border-radius:2px; background:linear-gradient(to right,var(--progress-fill-color) var(--seek-progress),color-mix(in srgb,var(--progress-fill-color) 30%,transparent) var(--seek-progress)); }
+.invitation-seek::-moz-range-track { height:3px; border-radius:2px; background:color-mix(in srgb,var(--progress-fill-color) 30%,transparent); }
+.invitation-seek::-moz-range-progress { height:3px; background:var(--progress-fill-color); }
+.invitation-seek::-webkit-slider-thumb { appearance:none; -webkit-appearance:none; width:10px; height:10px; margin-top:-3.5px; border:0; border-radius:50%; background:var(--progress-fill-color); }
+.invitation-seek::-moz-range-thumb { width:10px; height:10px; border:0; border-radius:50%; background:var(--progress-fill-color); }
+.invitation-volume-panel { position:absolute; bottom:100%; right:0; width:88px; padding:10px; border-radius:6px; background:inherit; background-color:#faf1df; box-shadow:0 2px 10px #0002; visibility:hidden; }
+.invitation-controls .volumeControls:hover .invitation-volume-panel, .invitation-controls .volumeControls:focus-within .invitation-volume-panel { visibility:visible; }
+.invitation-volume-panel input { width:100%; margin:0; accent-color:var(--volume-control-color); }
+.invitation-mute-mark { position:absolute; right:0; top:2px; font:18px sans-serif; color:var(--volume-control-color); }
+.invitation-audio-status { position:absolute; top:100%; left:0; font:12px sans-serif; }
+#comp-mu22seyf { scroll-margin-top:0; }
